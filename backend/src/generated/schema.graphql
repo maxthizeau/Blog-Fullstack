@@ -28,10 +28,44 @@ A field whose value is a UTC Offset: https://en.wikipedia.org/wiki/List_of_tz_da
 """
 scalar UtcOffset
 
-"\n    A string representing a duration conforming to the ISO8601 standard,\n    such as: P1W1DT13H23M34S\n    P is the duration designator (for period) placed at the start of the duration representation.\n    Y is the year designator that follows the value for the number of years.\n    M is the month designator that follows the value for the number of months.\n    W is the week designator that follows the value for the number of weeks.\n    D is the day designator that follows the value for the number of days.\n    T is the time designator that precedes the time components of the representation.\n    H is the hour designator that follows the value for the number of hours.\n    M is the minute designator that follows the value for the number of minutes.\n    S is the second designator that follows the value for the number of seconds.\n\n    Note the time designator, T, that precedes the time value.\n\n    Matches moment.js, Luxon and DateFns implementations\n    ,/. is valid for decimal places and +/- is a valid prefix\n  "
+"""
+A string representing a duration conforming to the ISO8601 standard,
+such as: P1W1DT13H23M34S
+P is the duration designator (for period) placed at the start of the duration representation.
+Y is the year designator that follows the value for the number of years.
+M is the month designator that follows the value for the number of months.
+W is the week designator that follows the value for the number of weeks.
+D is the day designator that follows the value for the number of days.
+T is the time designator that precedes the time components of the representation.
+H is the hour designator that follows the value for the number of hours.
+M is the minute designator that follows the value for the number of minutes.
+S is the second designator that follows the value for the number of seconds.
+
+Note the time designator, T, that precedes the time value.
+
+Matches moment.js, Luxon and DateFns implementations
+,/. is valid for decimal places and +/- is a valid prefix
+"""
 scalar Duration
 
-"\n    A string representing a duration conforming to the ISO8601 standard,\n    such as: P1W1DT13H23M34S\n    P is the duration designator (for period) placed at the start of the duration representation.\n    Y is the year designator that follows the value for the number of years.\n    M is the month designator that follows the value for the number of months.\n    W is the week designator that follows the value for the number of weeks.\n    D is the day designator that follows the value for the number of days.\n    T is the time designator that precedes the time components of the representation.\n    H is the hour designator that follows the value for the number of hours.\n    M is the minute designator that follows the value for the number of minutes.\n    S is the second designator that follows the value for the number of seconds.\n\n    Note the time designator, T, that precedes the time value.\n\n    Matches moment.js, Luxon and DateFns implementations\n    ,/. is valid for decimal places and +/- is a valid prefix\n  "
+"""
+A string representing a duration conforming to the ISO8601 standard,
+such as: P1W1DT13H23M34S
+P is the duration designator (for period) placed at the start of the duration representation.
+Y is the year designator that follows the value for the number of years.
+M is the month designator that follows the value for the number of months.
+W is the week designator that follows the value for the number of weeks.
+D is the day designator that follows the value for the number of days.
+T is the time designator that precedes the time components of the representation.
+H is the hour designator that follows the value for the number of hours.
+M is the minute designator that follows the value for the number of minutes.
+S is the second designator that follows the value for the number of seconds.
+
+Note the time designator, T, that precedes the time value.
+
+Matches moment.js, Luxon and DateFns implementations
+,/. is valid for decimal places and +/- is a valid prefix
+"""
 scalar ISO8601Duration
 
 """
@@ -245,7 +279,7 @@ scalar Locale
 """
 In the US, an ABA routing transit number (`ABA RTN`) is a nine-digit code to identify the financial institution.
 """
-scalar RoutingNumber @specifiedBy(url: "https://en.wikipedia.org/wiki/ABA_routing_transit_number")
+scalar RoutingNumber
 
 """
 Banking account number is a string of 5 to 17 alphanumeric values for representing an generic account number
@@ -255,18 +289,40 @@ scalar AccountNumber
 type Query {
   root: String!
   currentUser: User
-  getUser(id: Int!): User
+  singleUser(id: Int!): User
+  singlePost(id: Int!): Post
+  allPosts(categoryId: Int, orderBy: OrderByInput): [Post!]
+  singleCategory(id: Int!): Category
+  allCategories: [Category]
 }
 
 type Mutation {
   root: String!
-  signup(email: String!, password: String!): AuthPayload
-  login(email: String!, password: String!): AuthPayload
+  signup(signupInput: SignupInput!): AuthPayload
+  login(loginInput: LoginInput!): AuthPayload
+  createPost(data: CreatePostInput!): Post!
+  updatePost(id: Int!, data: UpdatePostInput!): Post!
+  deletePost(id: Int!): Post!
+  createCategory(data: CreateCategoryInput!): Category!
+  updateCategory(id: Int!, data: UpdateCategoryInput!): Category!
+  deleteCategory(id: Int!): Category!
 }
 
 type AuthPayload {
   token: String
   user: User
+}
+
+input SignupInput {
+  email: String!
+  password: String!
+  rePassword: String!
+  name: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
 
 type User {
@@ -276,10 +332,69 @@ type User {
   password: String!
   name: String
   role: Role!
+  posts: [Post]
 }
 
 enum Role {
   USER
   EDITOR
   ADMIN
+}
+
+type Post {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  published: Boolean!
+  title: String!
+  content: String!
+  author: User!
+  categories: [Category]
+}
+
+enum OrderByEnum {
+  ID
+  CREATE_DATE
+  UPDATE_DATE
+}
+
+enum SortModeEnum {
+  ASC
+  DESC
+}
+
+input OrderByInput {
+  orderBy: OrderByEnum
+  sort: SortModeEnum
+}
+
+input CreatePostInput {
+  title: String!
+  content: String!
+  categories: [Int!]!
+  published: Boolean
+}
+
+input UpdatePostInput {
+  title: String
+  content: String
+  authorId: Int
+  categories: [Int!]
+  published: Boolean
+}
+
+type Category {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  posts: [Post]
+}
+
+input CreateCategoryInput {
+  name: String!
+}
+
+input UpdateCategoryInput {
+  name: String
 }

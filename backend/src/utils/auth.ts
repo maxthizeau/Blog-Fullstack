@@ -1,17 +1,14 @@
 import jwt from "jsonwebtoken"
-
-const APP_SECRET = "THISISSECRETTOKEN"
+require("dotenv").config()
 
 function getTokenPayload(token) {
-  return jwt.verify(token, APP_SECRET)
+  return jwt.verify(token, process.env.SECRET_TOKEN as string)
 }
 
-function getUserId(req) {
+function getUserAuth(token) {
   // First, we check the authorization header (prioritize auth header, then cookie)
   try {
-    const tokenAuth = req?.headers?.authorization ?? null
-
-    const { user }: any = getTokenPayload(tokenAuth)
+    const { user }: any = getTokenPayload(token)
 
     return user
   } catch (e: any) {
@@ -19,4 +16,4 @@ function getUserId(req) {
   }
 }
 
-export { getUserId, APP_SECRET }
+export { getUserAuth }

@@ -8,7 +8,7 @@ export const userTypedefs = gql`
     password: String!
     name: String
     role: Role!
-    # posts     :[Post]
+    posts: [Post]
   }
 
   enum Role {
@@ -19,6 +19,6 @@ export const userTypedefs = gql`
 
   extend type Query {
     currentUser: User
-    getUser(id: Int!): User
+    singleUser(id: Int!): User
   }
 `

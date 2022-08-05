@@ -30,24 +30,22 @@ export type Scalars = {
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: any;
   /**
+   * A string representing a duration conforming to the ISO8601 standard,
+   * such as: P1W1DT13H23M34S
+   * P is the duration designator (for period) placed at the start of the duration representation.
+   * Y is the year designator that follows the value for the number of years.
+   * M is the month designator that follows the value for the number of months.
+   * W is the week designator that follows the value for the number of weeks.
+   * D is the day designator that follows the value for the number of days.
+   * T is the time designator that precedes the time components of the representation.
+   * H is the hour designator that follows the value for the number of hours.
+   * M is the minute designator that follows the value for the number of minutes.
+   * S is the second designator that follows the value for the number of seconds.
    *
-   *     A string representing a duration conforming to the ISO8601 standard,
-   *     such as: P1W1DT13H23M34S
-   *     P is the duration designator (for period) placed at the start of the duration representation.
-   *     Y is the year designator that follows the value for the number of years.
-   *     M is the month designator that follows the value for the number of months.
-   *     W is the week designator that follows the value for the number of weeks.
-   *     D is the day designator that follows the value for the number of days.
-   *     T is the time designator that precedes the time components of the representation.
-   *     H is the hour designator that follows the value for the number of hours.
-   *     M is the minute designator that follows the value for the number of minutes.
-   *     S is the second designator that follows the value for the number of seconds.
+   * Note the time designator, T, that precedes the time value.
    *
-   *     Note the time designator, T, that precedes the time value.
-   *
-   *     Matches moment.js, Luxon and DateFns implementations
-   *     ,/. is valid for decimal places and +/- is a valid prefix
-   *
+   * Matches moment.js, Luxon and DateFns implementations
+   * ,/. is valid for decimal places and +/- is a valid prefix
    */
   Duration: any;
   /** A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/. */
@@ -71,24 +69,22 @@ export type Scalars = {
   /** A field whose value is a ISBN-10 or ISBN-13 number: https://en.wikipedia.org/wiki/International_Standard_Book_Number. */
   ISBN: any;
   /**
+   * A string representing a duration conforming to the ISO8601 standard,
+   * such as: P1W1DT13H23M34S
+   * P is the duration designator (for period) placed at the start of the duration representation.
+   * Y is the year designator that follows the value for the number of years.
+   * M is the month designator that follows the value for the number of months.
+   * W is the week designator that follows the value for the number of weeks.
+   * D is the day designator that follows the value for the number of days.
+   * T is the time designator that precedes the time components of the representation.
+   * H is the hour designator that follows the value for the number of hours.
+   * M is the minute designator that follows the value for the number of minutes.
+   * S is the second designator that follows the value for the number of seconds.
    *
-   *     A string representing a duration conforming to the ISO8601 standard,
-   *     such as: P1W1DT13H23M34S
-   *     P is the duration designator (for period) placed at the start of the duration representation.
-   *     Y is the year designator that follows the value for the number of years.
-   *     M is the month designator that follows the value for the number of months.
-   *     W is the week designator that follows the value for the number of weeks.
-   *     D is the day designator that follows the value for the number of days.
-   *     T is the time designator that precedes the time components of the representation.
-   *     H is the hour designator that follows the value for the number of hours.
-   *     M is the minute designator that follows the value for the number of minutes.
-   *     S is the second designator that follows the value for the number of seconds.
+   * Note the time designator, T, that precedes the time value.
    *
-   *     Note the time designator, T, that precedes the time value.
-   *
-   *     Matches moment.js, Luxon and DateFns implementations
-   *     ,/. is valid for decimal places and +/- is a valid prefix
-   *
+   * Matches moment.js, Luxon and DateFns implementations
+   * ,/. is valid for decimal places and +/- is a valid prefix
    */
   ISO8601Duration: any;
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
@@ -175,34 +171,138 @@ export type AuthPayload = {
   user?: Maybe<User>;
 };
 
+export type Category = {
+  __typename?: 'Category';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  posts?: Maybe<Array<Maybe<Post>>>;
+  updatedAt: Scalars['DateTime'];
+};
+
+export type CreateCategoryInput = {
+  name: Scalars['String'];
+};
+
+export type CreatePostInput = {
+  categories: Array<Scalars['Int']>;
+  content: Scalars['String'];
+  published?: InputMaybe<Scalars['Boolean']>;
+  title: Scalars['String'];
+};
+
+export type LoginInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createCategory: Category;
+  createPost: Post;
+  deleteCategory: Category;
+  deletePost: Post;
   login?: Maybe<AuthPayload>;
   root: Scalars['String'];
   signup?: Maybe<AuthPayload>;
+  updateCategory: Category;
+  updatePost: Post;
+};
+
+
+export type MutationCreateCategoryArgs = {
+  data: CreateCategoryInput;
+};
+
+
+export type MutationCreatePostArgs = {
+  data: CreatePostInput;
+};
+
+
+export type MutationDeleteCategoryArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeletePostArgs = {
+  id: Scalars['Int'];
 };
 
 
 export type MutationLoginArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+  loginInput: LoginInput;
 };
 
 
 export type MutationSignupArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+  signupInput: SignupInput;
+};
+
+
+export type MutationUpdateCategoryArgs = {
+  data: UpdateCategoryInput;
+  id: Scalars['Int'];
+};
+
+
+export type MutationUpdatePostArgs = {
+  data: UpdatePostInput;
+  id: Scalars['Int'];
+};
+
+export enum OrderByEnum {
+  CreateDate = 'CREATE_DATE',
+  Id = 'ID',
+  UpdateDate = 'UPDATE_DATE'
+}
+
+export type OrderByInput = {
+  orderBy?: InputMaybe<OrderByEnum>;
+  sort?: InputMaybe<SortModeEnum>;
+};
+
+export type Post = {
+  __typename?: 'Post';
+  author: User;
+  categories?: Maybe<Array<Maybe<Category>>>;
+  content: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['Int'];
+  published: Scalars['Boolean'];
+  title: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Query = {
   __typename?: 'Query';
+  allCategories?: Maybe<Array<Maybe<Category>>>;
+  allPosts?: Maybe<Array<Post>>;
   currentUser?: Maybe<User>;
-  getUser?: Maybe<User>;
   root: Scalars['String'];
+  singleCategory?: Maybe<Category>;
+  singlePost?: Maybe<Post>;
+  singleUser?: Maybe<User>;
 };
 
 
-export type QueryGetUserArgs = {
+export type QueryAllPostsArgs = {
+  categoryId?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<OrderByInput>;
+};
+
+
+export type QuerySingleCategoryArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QuerySinglePostArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QuerySingleUserArgs = {
   id: Scalars['Int'];
 };
 
@@ -212,6 +312,30 @@ export enum Role {
   User = 'USER'
 }
 
+export type SignupInput = {
+  email: Scalars['String'];
+  name: Scalars['String'];
+  password: Scalars['String'];
+  rePassword: Scalars['String'];
+};
+
+export enum SortModeEnum {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
+
+export type UpdateCategoryInput = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdatePostInput = {
+  authorId?: InputMaybe<Scalars['Int']>;
+  categories?: InputMaybe<Array<Scalars['Int']>>;
+  content?: InputMaybe<Scalars['String']>;
+  published?: InputMaybe<Scalars['Boolean']>;
+  title?: InputMaybe<Scalars['String']>;
+};
+
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime'];
@@ -219,6 +343,7 @@ export type User = {
   id: Scalars['Int'];
   name?: Maybe<Scalars['String']>;
   password: Scalars['String'];
+  posts?: Maybe<Array<Maybe<Post>>>;
   role: Role;
 };
 
@@ -297,7 +422,10 @@ export type ResolversTypes = ResolversObject<{
   BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Byte: ResolverTypeWrapper<Scalars['Byte']>;
+  Category: ResolverTypeWrapper<Category>;
   CountryCode: ResolverTypeWrapper<Scalars['CountryCode']>;
+  CreateCategoryInput: CreateCategoryInput;
+  CreatePostInput: CreatePostInput;
   Currency: ResolverTypeWrapper<Scalars['Currency']>;
   DID: ResolverTypeWrapper<Scalars['DID']>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
@@ -323,6 +451,7 @@ export type ResolversTypes = ResolversObject<{
   LocalEndTime: ResolverTypeWrapper<Scalars['LocalEndTime']>;
   LocalTime: ResolverTypeWrapper<Scalars['LocalTime']>;
   Locale: ResolverTypeWrapper<Scalars['Locale']>;
+  LoginInput: LoginInput;
   Long: ResolverTypeWrapper<Scalars['Long']>;
   Longitude: ResolverTypeWrapper<Scalars['Longitude']>;
   MAC: ResolverTypeWrapper<Scalars['MAC']>;
@@ -335,10 +464,13 @@ export type ResolversTypes = ResolversObject<{
   NonPositiveFloat: ResolverTypeWrapper<Scalars['NonPositiveFloat']>;
   NonPositiveInt: ResolverTypeWrapper<Scalars['NonPositiveInt']>;
   ObjectID: ResolverTypeWrapper<Scalars['ObjectID']>;
+  OrderByEnum: OrderByEnum;
+  OrderByInput: OrderByInput;
   PhoneNumber: ResolverTypeWrapper<Scalars['PhoneNumber']>;
   Port: ResolverTypeWrapper<Scalars['Port']>;
   PositiveFloat: ResolverTypeWrapper<Scalars['PositiveFloat']>;
   PositiveInt: ResolverTypeWrapper<Scalars['PositiveInt']>;
+  Post: ResolverTypeWrapper<Post>;
   PostalCode: ResolverTypeWrapper<Scalars['PostalCode']>;
   Query: ResolverTypeWrapper<{}>;
   RGB: ResolverTypeWrapper<Scalars['RGB']>;
@@ -346,6 +478,8 @@ export type ResolversTypes = ResolversObject<{
   Role: Role;
   RoutingNumber: ResolverTypeWrapper<Scalars['RoutingNumber']>;
   SafeInt: ResolverTypeWrapper<Scalars['SafeInt']>;
+  SignupInput: SignupInput;
+  SortModeEnum: SortModeEnum;
   String: ResolverTypeWrapper<Scalars['String']>;
   Time: ResolverTypeWrapper<Scalars['Time']>;
   TimeZone: ResolverTypeWrapper<Scalars['TimeZone']>;
@@ -355,6 +489,8 @@ export type ResolversTypes = ResolversObject<{
   UUID: ResolverTypeWrapper<Scalars['UUID']>;
   UnsignedFloat: ResolverTypeWrapper<Scalars['UnsignedFloat']>;
   UnsignedInt: ResolverTypeWrapper<Scalars['UnsignedInt']>;
+  UpdateCategoryInput: UpdateCategoryInput;
+  UpdatePostInput: UpdatePostInput;
   User: ResolverTypeWrapper<User>;
   UtcOffset: ResolverTypeWrapper<Scalars['UtcOffset']>;
   Void: ResolverTypeWrapper<Scalars['Void']>;
@@ -367,7 +503,10 @@ export type ResolversParentTypes = ResolversObject<{
   BigInt: Scalars['BigInt'];
   Boolean: Scalars['Boolean'];
   Byte: Scalars['Byte'];
+  Category: Category;
   CountryCode: Scalars['CountryCode'];
+  CreateCategoryInput: CreateCategoryInput;
+  CreatePostInput: CreatePostInput;
   Currency: Scalars['Currency'];
   DID: Scalars['DID'];
   Date: Scalars['Date'];
@@ -393,6 +532,7 @@ export type ResolversParentTypes = ResolversObject<{
   LocalEndTime: Scalars['LocalEndTime'];
   LocalTime: Scalars['LocalTime'];
   Locale: Scalars['Locale'];
+  LoginInput: LoginInput;
   Long: Scalars['Long'];
   Longitude: Scalars['Longitude'];
   MAC: Scalars['MAC'];
@@ -405,16 +545,19 @@ export type ResolversParentTypes = ResolversObject<{
   NonPositiveFloat: Scalars['NonPositiveFloat'];
   NonPositiveInt: Scalars['NonPositiveInt'];
   ObjectID: Scalars['ObjectID'];
+  OrderByInput: OrderByInput;
   PhoneNumber: Scalars['PhoneNumber'];
   Port: Scalars['Port'];
   PositiveFloat: Scalars['PositiveFloat'];
   PositiveInt: Scalars['PositiveInt'];
+  Post: Post;
   PostalCode: Scalars['PostalCode'];
   Query: {};
   RGB: Scalars['RGB'];
   RGBA: Scalars['RGBA'];
   RoutingNumber: Scalars['RoutingNumber'];
   SafeInt: Scalars['SafeInt'];
+  SignupInput: SignupInput;
   String: Scalars['String'];
   Time: Scalars['Time'];
   TimeZone: Scalars['TimeZone'];
@@ -424,6 +567,8 @@ export type ResolversParentTypes = ResolversObject<{
   UUID: Scalars['UUID'];
   UnsignedFloat: Scalars['UnsignedFloat'];
   UnsignedInt: Scalars['UnsignedInt'];
+  UpdateCategoryInput: UpdateCategoryInput;
+  UpdatePostInput: UpdatePostInput;
   User: User;
   UtcOffset: Scalars['UtcOffset'];
   Void: Scalars['Void'];
@@ -446,6 +591,15 @@ export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 export interface ByteScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Byte'], any> {
   name: 'Byte';
 }
+
+export type CategoryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']> = ResolversObject<{
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  posts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Post']>>>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
 export interface CountryCodeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['CountryCode'], any> {
   name: 'CountryCode';
@@ -560,9 +714,15 @@ export interface MacScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes[
 }
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
+  createCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'data'>>;
+  createPost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'data'>>;
+  deleteCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationDeleteCategoryArgs, 'id'>>;
+  deletePost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'id'>>;
+  login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'loginInput'>>;
   root?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  signup?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationSignupArgs, 'email' | 'password'>>;
+  signup?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationSignupArgs, 'signupInput'>>;
+  updateCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationUpdateCategoryArgs, 'data' | 'id'>>;
+  updatePost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationUpdatePostArgs, 'data' | 'id'>>;
 }>;
 
 export interface NegativeFloatScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['NegativeFloat'], any> {
@@ -613,14 +773,30 @@ export interface PositiveIntScalarConfig extends GraphQLScalarTypeConfig<Resolve
   name: 'PositiveInt';
 }
 
+export type PostResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = ResolversObject<{
+  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  categories?: Resolver<Maybe<Array<Maybe<ResolversTypes['Category']>>>, ParentType, ContextType>;
+  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export interface PostalCodeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['PostalCode'], any> {
   name: 'PostalCode';
 }
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  allCategories?: Resolver<Maybe<Array<Maybe<ResolversTypes['Category']>>>, ParentType, ContextType>;
+  allPosts?: Resolver<Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType, Partial<QueryAllPostsArgs>>;
   currentUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>;
   root?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  singleCategory?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, RequireFields<QuerySingleCategoryArgs, 'id'>>;
+  singlePost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QuerySinglePostArgs, 'id'>>;
+  singleUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QuerySingleUserArgs, 'id'>>;
 }>;
 
 export interface RgbScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['RGB'], any> {
@@ -677,6 +853,7 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  posts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Post']>>>, ParentType, ContextType>;
   role?: Resolver<ResolversTypes['Role'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -694,6 +871,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   AuthPayload?: AuthPayloadResolvers<ContextType>;
   BigInt?: GraphQLScalarType;
   Byte?: GraphQLScalarType;
+  Category?: CategoryResolvers<ContextType>;
   CountryCode?: GraphQLScalarType;
   Currency?: GraphQLScalarType;
   DID?: GraphQLScalarType;
@@ -735,6 +913,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   Port?: GraphQLScalarType;
   PositiveFloat?: GraphQLScalarType;
   PositiveInt?: GraphQLScalarType;
+  Post?: PostResolvers<ContextType>;
   PostalCode?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
   RGB?: GraphQLScalarType;

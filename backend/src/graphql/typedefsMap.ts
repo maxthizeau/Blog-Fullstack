@@ -1,6 +1,8 @@
 import { gql } from "apollo-server-express"
 import { userTypedefs } from "./typedefs/User"
 import { appTypedefs } from "./typedefs/App"
+import { postTypedefs } from "./typedefs/Post"
+import { categoryTypedefs } from "./typedefs/Category"
 
 const rootTypeDefs = gql`
   type Query {
@@ -11,6 +13,6 @@ const rootTypeDefs = gql`
   }
 `
 
-const typeDefs = [rootTypeDefs, appTypedefs, userTypedefs]
+const typeDefs = [rootTypeDefs, appTypedefs, userTypedefs, postTypedefs, categoryTypedefs]
 
 export default typeDefs

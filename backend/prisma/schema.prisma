@@ -26,13 +26,15 @@ model Post {
   updatedAt  DateTime   @updatedAt
   published  Boolean    @default(false)
   title      String     @db.VarChar(255)
-  author     User?      @relation(fields: [authorId], references: [id])
-  authorId   Int?
+  content    String
+  author     User       @relation(fields: [authorId], references: [id])
+  authorId   Int
   categories Category[] @relation(name: "rel_post_category")
 }
 
 model Category {
   id        Int      @id @default(autoincrement())
+  name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   posts     Post[]   @relation(name: "rel_post_category")

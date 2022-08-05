@@ -6,8 +6,20 @@ export const appTypedefs = gql`
     user: User
   }
 
+  input SignupInput {
+    email: String!
+    password: String!
+    rePassword: String!
+    name: String!
+  }
+
+  input LoginInput {
+    email: String!
+    password: String!
+  }
+
   extend type Mutation {
-    signup(email: String!, password: String!): AuthPayload
-    login(email: String!, password: String!): AuthPayload
+    signup(signupInput: SignupInput!): AuthPayload
+    login(loginInput: LoginInput!): AuthPayload
   }
 `

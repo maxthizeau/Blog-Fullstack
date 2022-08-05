@@ -1,18 +1,23 @@
 import { PrismaClient } from "@prisma/client"
-import { getUserId } from "@src/lib/log_lib"
-import cookie from "cookie"
+import { User } from "src/generated/graphql"
+import Logger from "src/utils/logger"
+import { getUserAuth } from "src/utils/auth"
 
 export interface Context {
   req: any
   prisma: PrismaClient
-  user: any
+  user: User | undefined
 }
 
 const prisma = new PrismaClient()
 
 export const context = ({ req }: any): Context => {
-  // First, we check the authorization header (prioritize auth header, then cookie)
-  const tokenAuth = req?.headers?.authorization ?? null
+  // Verify jwt token
+  const parts = req.headers.authorization ? req.headers.authorization.split(" ") : [""]
+  // Filter the token (remove Bearer)
+  const token = parts.length === 2 && parts[0].toLowerCase() === "bearer" ? parts[1] : parts.length === 1 ? parts[0] : undefined
+  // Retrieve user from token
+  const user = token ? getUserAuth(token) : undefined
 
-  return { ...req, prisma, user: tokenAuth ? getUserId(req) : null }
+  return { ...req, prisma, user: user }
 }
