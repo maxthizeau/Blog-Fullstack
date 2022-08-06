@@ -52,14 +52,14 @@ const postQueries = {
     },
   },
   Post: {
-    categories: async (parent: Post, _args, context: Context) => {
+    categories: async (parent, _args, context: Context) => {
       loggerGraphQLQuery("Post", "category", context.user)
       const categories = await context.prisma.category.findMany({ where: { posts: { some: { id: parent.id } } } })
       return categories
     },
-    author: async (parent: Post, _args, context: Context) => {
+    author: async (parent, _args, context: Context) => {
       loggerGraphQLQuery("Post", "author", context.user)
-      const author = await context.prisma.user.findUnique({ where: { id: parent.author?.id } })
+      const author = await context.prisma.user.findUnique({ where: { id: parent.authorId } })
       return author
     },
   },

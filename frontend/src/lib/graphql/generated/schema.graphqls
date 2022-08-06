@@ -323,20 +323,42 @@ scalar AccountNumber
 type Query {
   root: String!
   currentUser: User
-  getUser(id: Int!): User
+  singleUser(id: Int!): User
+  singlePost(id: Int!): Post
+  allPosts(categoryId: Int, orderBy: OrderByInput): [Post!]
+  singleCategory(id: Int!): Category
+  allCategories: [Category]
   isTemporaryUser: Boolean
   temporaryBuyRequest: [Int]
 }
 
 type Mutation {
   root: String!
-  signup(email: String!, password: String!): AuthPayload
-  login(email: String!, password: String!): AuthPayload
+  signup(signupInput: SignupInput!): AuthPayload
+  login(loginInput: LoginInput!): AuthPayload
+  createPost(data: CreatePostInput!): Post!
+  updatePost(id: Int!, data: UpdatePostInput!): Post!
+  deletePost(id: Int!): Post!
+  createCategory(data: CreateCategoryInput!): Category!
+  updateCategory(id: Int!, data: UpdateCategoryInput!): Category!
+  deleteCategory(id: Int!): Category!
 }
 
 type AuthPayload {
   token: String
   user: User
+}
+
+input SignupInput {
+  email: String!
+  password: String!
+  rePassword: String!
+  name: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
 
 type User {
@@ -346,10 +368,69 @@ type User {
   password: String!
   name: String
   role: Role!
+  posts: [Post]
 }
 
 enum Role {
   USER
   EDITOR
   ADMIN
+}
+
+type Post {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  published: Boolean!
+  title: String!
+  content: String!
+  author: User!
+  categories: [Category]
+}
+
+enum OrderByEnum {
+  ID
+  CREATE_DATE
+  UPDATE_DATE
+}
+
+enum SortModeEnum {
+  ASC
+  DESC
+}
+
+input OrderByInput {
+  orderBy: OrderByEnum
+  sort: SortModeEnum
+}
+
+input CreatePostInput {
+  title: String!
+  content: String!
+  categories: [Int!]!
+  published: Boolean
+}
+
+input UpdatePostInput {
+  title: String
+  content: String
+  authorId: Int
+  categories: [Int!]
+  published: Boolean
+}
+
+type Category {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  posts: [Post]
+}
+
+input CreateCategoryInput {
+  name: String!
+}
+
+input UpdateCategoryInput {
+  name: String
 }
